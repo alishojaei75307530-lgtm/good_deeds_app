@@ -1,0 +1,51 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install Capacitor
+      run: |
+        npm init -y
+        npm install @capacitor/core @capacitor/cli
+        npx cap init "GoodDeeds" "com.example.gooddeeds" --web-dir=.
+
+    - name: Add Android Platform
+      run: |
+        npm install @capacitor/android
+        npx cap add android
+
+    - name: Sync Web Files
+      run: npx cap sync
+
+    - name: Build APK
+      run: |
+        cd android
+        chmod +x gradlew
+        ./gradlew assembleDebug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: GoodDeeds-APK
+        path: android/app/build/outputs/apk/debug/app-debug.apk
