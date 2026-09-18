@@ -1,0 +1,6 @@
+{
+  "name": "nightmare",
+  "description": "تحلیل ویدیو و گفتار و تشخیص نشانه‌های احتمالی فریب با هوش مصنوعی",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
